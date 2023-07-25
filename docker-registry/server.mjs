@@ -37,27 +37,30 @@ app.get("/", (req, res) => {});
 
 app.get("/auth", (req, res) => {
 	res.setHeader("access-control-allow-origin", "*");
-	let scopes;
+
 	const { account, scope, client_id, service } = req.query;
-	if (scope) scopes = scope.split(":");
 
 	const claimSet = {
-		iss: "192.168.2.254",
+		iss: service,
 		sub: account,
 		aud: service,
 		exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30 days
 		nbf: Math.floor(Date.now() / 1000) - 10,
 		iat: Math.floor(Date.now() / 1000),
 		jti: Math.random().toString(36).substring(7),
-		access: [
-			{
-				type: scope ? scopes[0] : "repository",
-				name: scope ? scopes[1] : "*",
-				actions: ["pull", "push"],
-			},
-		],
 	};
 
+	let scopes;
+	if (scope) {
+		scopes = scope.split(":");
+		claimSet.access = [
+			{
+				type: "repository",
+				name: scopes[1],
+				actions: [scopes[2]],
+			},
+		];
+	}
 	const token = jwt.sign(claimSet, privateKey, {
 		// algorithm: "RS256",
 		algorithm: "ES256",

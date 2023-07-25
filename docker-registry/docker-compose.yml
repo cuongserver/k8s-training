@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  registry:
+    image: registry:2
+    container_name: docker-registry
+    ports:
+    - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+      REGISTRY_HTTP_TLS_CERTIFICATE: /tls/cert.pem.crt
+      REGISTRY_HTTP_TLS_KEY: /tls/private-key.pem
+      REGISTRY_AUTH: token
+      REGISTRY_AUTH_TOKEN_REALM: https://192.168.2.254:5005/auth
+      REGISTRY_AUTH_TOKEN_SERVICE: 192.168.2.254
+      # ISSUER MUST MATCH REALM
+      REGISTRY_AUTH_TOKEN_ISSUER: 192.168.2.254
+      REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE: /tls/cert.pem.crt
+    volumes:
+      - ./data:/data
+      - ./tls:/tls
