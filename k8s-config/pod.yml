@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: getting-started
+spec:
+  template:
+    # This is the pod template
+    spec:
+      containers:
+        - name: gs
+          image: 192.168.2.14:5000/docker/gs
+      nodeSelector:
+        kubernetes.io/hostname: vm2
+      restartPolicy: Never
