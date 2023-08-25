@@ -16,7 +16,7 @@ apt install sudo -y
 ### Install `docker`
 
 ```bash
-#Debian
+#For Debian
 
 #configure repo
 sudo apt-get update
@@ -65,4 +65,11 @@ sudo snap install microk8s --classic
 ```bash
 sudo usermod -a -G microk8s $USER
 sudo chown -f -R $USER ~/.kube
+sudo hostnamectl set-hostname <desired_hostname>
+```
+
+Edit **_`hosts`_** file
+
+```bash
+sudo nano /etc/hosts
 ```
